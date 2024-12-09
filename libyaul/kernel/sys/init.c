@@ -23,6 +23,8 @@
 
 void user_init(void) __weak;
 
+void user_early_init(void) __weak;
+
 static void _bss_clear(void);
 
 void __noreturn
@@ -34,6 +36,10 @@ __sys_init(void)
     void __global_dtors(void) __weak;
 
     _bss_clear();
+
+    if (user_early_init != NULL) {
+        user_early_init();
+    }
 
     __atexit_init();
 
